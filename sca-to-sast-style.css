@@ -3,6 +3,7 @@
   --severity-color-high: #CE5019;
   --severity-color-medium: #D68000;
   --severity-color-low: #88879E;
+  --tal-green: #6BBC46;
 }
 
 
@@ -578,3 +579,90 @@
     display: flex;
     padding: 12px;
   }
+
+/* TAL extras */
+.header .tal-logo {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+.header .tal-logo svg {
+  height: 32px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+.search-bar input[type="search"] {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #b3b2bd;
+  border-radius: 4px;
+}
+.severity-filter label {
+  margin-right: 8px;
+}
+
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  padding: 8px 0;
+  z-index: 5;
+}
+
+.card.collapsed .card__section,
+.card.collapsed .card__cta {
+  display: none;
+}
+.card.collapsed summary::after {
+  content: "▶";
+  margin-left: 8px;
+}
+.card summary::after {
+  content: "▼";
+  margin-left: 8px;
+}
+
+.btn {
+  background: var(--tal-green);
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn:hover {
+  opacity: 0.9;
+}
+
+.code-range:hover {
+  background: rgba(255,0,0,.15);
+  cursor: help;
+}
+
+.tooltip {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #b3b2bd;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-size: 12px;
+  max-width: 260px;
+  display: none;
+}
+
+@media print {
+  .header {
+    background-image: none;
+  }
+  .search-bar,
+  .severity-filter,
+  .btn-export,
+  .tal-logo {
+    display: none;
+  }
+}

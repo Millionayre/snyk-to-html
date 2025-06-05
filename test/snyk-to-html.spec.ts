@@ -431,4 +431,17 @@ describe('test running SnykToHtml.run', () => {
       },
     );
   });
+
+  it('creates a modern style report', () => {
+    SnykToHtml.run(
+      path.join(__dirname, 'fixtures', 'test-report.json'),
+      WITHOUT_REMEDIATION,
+      path.join(__dirname, '..', 'template', 'modern', 'test-report.hbs'),
+      WITHOUT_SUMMARY,
+      (report) => {
+        expect(report).toContain('--severity-color-high');
+        expect(report).toContain('layout-stacked__header');
+      },
+    );
+  });
 });

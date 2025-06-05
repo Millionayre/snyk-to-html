@@ -32,6 +32,7 @@ node ./dist/index.js
 | `-s`  | `--summary`                | Generates an HTML with only the summary, instead of the details report. Defaults to details vulnerability report |
 | `-d`  | `--debug`                  | Runs the CLI in debug mode                                                                                       |
 | `-a`  | `--actionable-remediation` | Display actionable remediation info if available                                                                 |
+| `-m`  | `--modern`                 | Use modern unified template design                                                                 |
 
 When in doubt, use `snyk-to-html --help` or `snyk-to-html -h`.
 
@@ -109,6 +110,10 @@ Snyk JSON to HTML Mapper mapper works with the different Snyk Products.  Change 
 ## View the HTML report
 
 Simply open your new file (`results-[type].html` as above) in a browser, and rejoice.
+
+Sample outputs demonstrating the new unified style can be viewed in
+`updated-sca-report.html`, `updated-sast-report.html`, `updated-iac-report.html` and `updated-container-report.html` at the project
+root.
 
 
 ## Getting support for snyk-to-html

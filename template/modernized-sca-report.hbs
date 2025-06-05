@@ -1,0 +1,9 @@
+{{> "modernized-sca-report.modern-inline-css"}}
+{{> "modernized-sca-report.modern-header"}}
+{{> "modernized-sca-report.modern-metatable-css"}}
+{{> "modernized-sca-report.modern-metatable"}}
+{{> "modernized-sca-report.modern-inline-js"}}
+
+{{#each vulnerabilities}}
+  {{> "modernized-sca-report.modern-vuln-card" this}}
+{{/each}}

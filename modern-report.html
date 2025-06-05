@@ -1,0 +1,144 @@
+<!--
+Migration Notes
+- uses unified css via sca-to-sast-style.css
+- layout mirrors updated-sca-report.html
+- sample content derived from Snyk Code fixture
+- checked cross-browser and print styles
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snyk Code Test Report</title>
+  <base target="_blank">
+  <link rel="stylesheet" href="sca-to-sast-style.css">
+</head>
+<body class="section-projects">
+  <main class="layout-stacked">
+    <div class="layout-stacked__header header">
+      <header class="project__header">
+        <div class="layout-container">
+          <a class="brand" href="https://snyk.io" title="Snyk">
+            <svg width="68" height="35" viewBox="0 0 68 35" xmlns="http://www.w3.org/2000/svg" role="img">
+              <title>Snyk - Open Source Security</title>
+              <g fill="#fff"><path d="M5.732 27.278C3.445 27.278 1.589 26.885 0 26.124l.483-3.652C2.163 23.296 4.056 23.689 5.643 23.689c1.158 0 1.92-.394 1.92-1.09 0-2.005-7.23-1.523-7.23-6.76 0-3.348 3.074-5.11 6.926-5.11 1.92 0 3.902.52 5.185.975l-.52 3.59c-1.347-.52-3.177-1.003-4.702-1.003-.94 0-1.704.33-1.704.94 0 1.977 7.385 1.584 7.385 6.694 0 3.4-3.026 5.352-7.17 5.352zM25.726 26.936V17.894c0-2.067-.915-3.044-2.657-3.044-.85 0-1.74.24-2.35.61v11.476h-5.367V11.262l5.25-.432-.128 2.562h.178c1.132-1.522 3.05-2.676 5.34-2.676 2.744 0 5.12 1.7 5.12 5.72v10.5h-5.388zM61.175 26.936l-4.296-7.457h-.433v7.456H51.082V8.37l5.365-8.37v17.323c1.068-1.306 4.665-6.264 4.665-6.264h6.62l-6.278 6.63 6.495 9.261h-6.774zM44.13 11.11l-2.2 7.152c-.43 1.344-.85 3.817-.85 3.817s-.33-2.563-.788-3.907l-2.352-7.154H31.928l6.534 15.827c-.89 2.105-2.263 3.88-4.093 3.88-.33 0-.66-.013-.98-.05l-2.134 3.296c.673.38 1.957.774 3.482.774 3.966 0 6.622-3.208 8.478-7.95l6.228-15.777H44.13z"/></g>
+            </svg>
+          </a>
+          <div class="header-wrap">
+            <h1 class="project__header__title">Snyk Code Report</h1>
+            <p class="timestamp">TIMESTAMP</p>
+          </div>
+          <div class="source-panel">
+            <span>Scanned repository:</span>
+            <ul>
+              <li class="paths">/path/to/repository (java)</li>
+            </ul>
+          </div>
+          <div class="meta-counts">
+            <div class="meta-count"><span class="severity-icon severity-icon--high">H</span> <span><strong>1</strong> high issue</span></div>
+            <div class="meta-count"><span class="severity-icon severity-icon--medium">M</span> <span><strong>2</strong> medium issues</span></div>
+            <div class="meta-count"><span class="severity-icon severity-icon--low">L</span> <span><strong>0</strong> low issues</span></div>
+          </div>
+        </div>
+      </header>
+    </div>
+    <section class="layout-container">
+      <table class="metatable">
+        <tbody>
+          <tr class="meta-row"><th class="meta-row-label">Project</th> <td class="meta-row-value">demo-code</td></tr>
+          <tr class="meta-row"><th class="meta-row-label">Path</th> <td class="meta-row-value">/path/to/repository</td></tr>
+          <tr class="meta-row"><th class="meta-row-label">Language</th> <td class="meta-row-value">Java</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <div class="layout-container" style="padding-top:35px;">
+      <div class="cards--vuln filter--patch filter--ignore">
+        <div class="card card--vuln severity--high" data-snyk-test="high">
+          <input type="radio" name="tab-view-0" id="tab-dataflow-0" value="dataflow" class="card__tab__radio" checked>
+          <input type="radio" name="tab-view-0" id="tab-fix-0" value="fix" class="card__tab__radio">
+          <header class="card__header">
+            <div class="card__header__main">
+              <div class="severity-icon severity-icon--high">H</div>
+              <h2 class="card__title">Use of Password Hash With Insufficient Computational Effort</h2>
+              <div class="card__actions">
+                <label for="tab-dataflow-0" class="card__action">Details</label>
+                <label for="tab-fix-0" class="card__action">Fix Analysis</label>
+              </div>
+            </div>
+            <ul class="card__meta">
+              <li class="card__meta__item">SNYK-CODE</li>
+              <li class="card__meta__item">CWE-916</li>
+              <li class="card__meta__item">InsecureHash</li>
+            </ul>
+          </header>
+          <div class="card__section">
+            <div class="label label--high"><span class="label__text">high severity</span></div>
+            <div class="card__summary severity--high">
+              <p>The SHA1 hash is insecure. Consider using a stronger algorithm.</p>
+              <div class="file-location">Found in: <strong>SHA1.java (line : 51)</strong></div>
+            </div>
+            <div class="card__panel dataflow" data-pane="dataflow">
+              <h2 class="card__panel__heading"><span class="heading-char">⇣</span> Details</h2>
+              <div class="dataflow__item">
+                <span class="dataflow__lineno">51:1</span>
+                <div class="dataflow__code"><span class="marker">DigestUtils.sha1Hex(input)</span></div>
+                <span class="dataflow__badge">Source</span>
+              </div>
+            </div>
+            <div class="card__panel fix-analysis" data-pane="fix">
+              <h2 class="card__panel__heading"><span class="heading-char">✓</span> Fix Analysis</h2>
+              <div class="card__panel__markdown">
+                <p><strong>Remediation:</strong> Replace SHA1 with SHA256.</p>
+                <p><strong>CVSS Score:</strong> 7.5</p>
+                <p><strong>Published:</strong> 2022-01-01</p>
+              </div>
+            </div>
+          </div>
+          <div class="cta card__cta"><p><a href="https://snyk.io/vuln/SNYK-JAVA-1234">More about this issue</a></p></div>
+        </div>
+      </div>
+    </div>
+  </main>
+<script>
+  const remediations = document.querySelectorAll('.js-remediation');
+  remediations.forEach(r => { r.parentElement.classList.toggle('shown'); r.addEventListener('click', remediationClick); });
+  const allPanes = document.querySelectorAll('[data-pane]');
+  allPanes.forEach(p => { p.classList.remove('shown'); });
+  const remediationNav = document.querySelectorAll('.js-nav');
+  remediationNav.forEach(nav => { nav.addEventListener('click', navClick); });
+  if (remediationNav && remediationNav.length > 0) {
+    remediationNav[0].classList.add('active');
+    const targetPaneData = remediationNav[0].dataset && remediationNav[0].dataset.toggle;
+    if (targetPaneData) { showPane(targetPaneData); }
+  }
+  function remediationClick(){ this.parentElement.classList.toggle('shown'); }
+  function navClick(){
+    const remediationNav=document.querySelectorAll('.js-nav');
+    remediationNav.forEach(nav=>{ nav.classList.remove('active'); });
+    this.classList.toggle('active');
+    const targetPaneData=this.dataset&&this.dataset.toggle;
+    if(targetPaneData){ showPane(targetPaneData); }
+  }
+  function showPane(targetPaneData){
+    const targetPanes=document.querySelectorAll(`[data-pane='${targetPaneData}']`);
+    if(targetPanes){
+      const allPanes=document.querySelectorAll('[data-pane]');
+      allPanes.forEach(p=>{ p.classList.remove('shown'); });
+      targetPanes[0].classList.add('shown');
+    }
+  }
+  document.querySelectorAll('.card__tab__radio').forEach(radio => {
+    radio.addEventListener('change', function(){
+      const card = this.closest('.card');
+      if(!card) return;
+      const panes = card.querySelectorAll('[data-pane]');
+      panes.forEach(p => p.style.display = 'none');
+      const pane = card.querySelector(`[data-pane='${this.value}']`);
+      if(pane) pane.style.display = 'block';
+    });
+  });
+</script>
+</body>
+</html>

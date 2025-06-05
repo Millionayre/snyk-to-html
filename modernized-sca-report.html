@@ -1,9 +1,12 @@
 <!--
 Migration Notes
-- uses unified css via sca-to-sast-style.css
-- layout mirrors updated-sca-report.html
-- sample content derived from Snyk Code fixture
-- checked cross-browser and print styles
+- added css via sca-to-sast-style.css
+- header now uses gradient from SAST
+- severity colours tokenised via CSS variables
+- severity icons added
+- DOM: wrapper .project__header retained; added .card__header to vuln card
+- images copied from SAST via data URI for external links
+- tested Chrome/Firefox/Edge and print mode
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +14,7 @@ Migration Notes
   <meta charset="utf-8">
   <meta http-equiv="Content-Language" content="en-us">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snyk Code Test Report</title>
+  <title>Snyk SCA Test Report</title>
   <base target="_blank">
   <link rel="stylesheet" href="sca-to-sast-style.css">
 </head>
@@ -27,20 +30,19 @@ Migration Notes
             </svg>
           </a>
           <div class="header-wrap">
-            <h1 class="project__header__title">Snyk Code Report</h1>
+            <h1 class="project__header__title">Snyk test report</h1>
             <p class="timestamp">TIMESTAMP</p>
           </div>
           <div class="source-panel">
-            <span>Scanned repository:</span>
+            <span>Scanned the following path:</span>
             <ul>
-              <li class="paths">/path/to/repository (java)</li>
+              <li class="paths">/path/to/project (npm)</li>
             </ul>
           </div>
           <div class="meta-counts">
-            <div class="meta-count"><span class="severity-icon severity-icon--high"></span> <span><strong>1</strong> high issue</span></div>
-            <div class="meta-count"><span class="severity-icon severity-icon--medium"></span> <span><strong>2</strong> medium issues</span></div>
-            <div class="meta-count"><span class="severity-icon severity-icon--low"></span> <span><strong>0</strong> low issues</span></div>
-
+            <div class="meta-count"><span>5</span> <span>known vulnerabilities</span></div>
+            <div class="meta-count"><span>8 vulnerable dependency paths</span></div>
+            <div class="meta-count"><span>135</span> <span>dependencies</span></div>
           </div>
         </div>
       </header>
@@ -48,9 +50,10 @@ Migration Notes
     <section class="layout-container">
       <table class="metatable">
         <tbody>
-          <tr class="meta-row"><th class="meta-row-label">Project</th> <td class="meta-row-value">demo-code</td></tr>
-          <tr class="meta-row"><th class="meta-row-label">Path</th> <td class="meta-row-value">/path/to/repository</td></tr>
-          <tr class="meta-row"><th class="meta-row-label">Language</th> <td class="meta-row-value">Java</td></tr>
+          <tr class="meta-row"><th class="meta-row-label">Project</th> <td class="meta-row-value">demo-project</td></tr>
+          <tr class="meta-row"><th class="meta-row-label">Path</th> <td class="meta-row-value">/path/to/project</td></tr>
+          <tr class="meta-row"><th class="meta-row-label">Package Manager</th> <td class="meta-row-value">npm</td></tr>
+          <tr class="meta-row"><th class="meta-row-label">Manifest</th> <td class="meta-row-value">package.json</td></tr>
         </tbody>
       </table>
     </section>
@@ -62,42 +65,34 @@ Migration Notes
           <header class="card__header">
             <div class="card__header__main">
               <div class="severity-icon severity-icon--high"></div>
-              <h2 class="card__title">Use of Password Hash With Insufficient Computational Effort</h2>
+              <h2 class="card__title">Regular Expression Denial of Service (ReDoS)</h2>
               <div class="card__actions">
-                <label for="tab-dataflow-0" class="card__action">Details</label>
+                <label for="tab-dataflow-0" class="card__action">Data Flow</label>
                 <label for="tab-fix-0" class="card__action">Fix Analysis</label>
               </div>
             </div>
             <ul class="card__meta">
-              <li class="card__meta__item">SNYK-CODE</li>
-              <li class="card__meta__item">CWE-916</li>
-              <li class="card__meta__item">InsecureHash</li>
+              <li class="card__meta__item">npm</li>
+              <li class="card__meta__item">CWE-400</li>
+              <li class="card__meta__item">brace-expansion</li>
             </ul>
           </header>
           <div class="card__section">
             <div class="label label--high"><span class="label__text">high severity</span></div>
             <div class="card__summary severity--high">
-              <p>The SHA1 hash is insecure. Consider using a stronger algorithm.</p>
-              <div class="file-location">Found in: <strong>SHA1.java (line : 51)</strong></div>
+              <p>Package brace-expansion is vulnerable to ReDoS.</p>
+              <div class="file-location">Found in: <strong>index.js (line : 10)</strong></div>
             </div>
             <div class="card__panel dataflow" data-pane="dataflow">
-              <h2 class="card__panel__heading"><span class="heading-char">⇣</span> Details</h2>
-              <div class="dataflow__item">
-                <span class="dataflow__lineno">51:1</span>
-                <div class="dataflow__code"><span class="marker">DigestUtils.sha1Hex(input)</span></div>
-                <span class="dataflow__badge">Source</span>
-              </div>
+              <h2 class="card__panel__heading"><span class="heading-char">⇣</span> Data Flow</h2>
+              <div class="dataflow__item"><span class="dataflow__lineno">10:1</span><div class="dataflow__code"><span class="marker">user input</span></div></div>
             </div>
             <div class="card__panel fix-analysis" data-pane="fix">
               <h2 class="card__panel__heading"><span class="heading-char">✓</span> Fix Analysis</h2>
-              <div class="card__panel__markdown">
-                <p><strong>Remediation:</strong> Replace SHA1 with SHA256.</p>
-                <p><strong>CVSS Score:</strong> 7.5</p>
-                <p><strong>Published:</strong> 2022-01-01</p>
-              </div>
+              <div class="card__panel__markdown"><p>Upgrade brace-expansion to version 1.1.7 or higher.</p></div>
             </div>
           </div>
-          <div class="cta card__cta"><p><a href="https://snyk.io/vuln/SNYK-JAVA-1234">More about this issue</a></p></div>
+          <div class="cta card__cta"><p><a href="https://snyk.io/vuln/npm:brace-expansion:20170302">More about this vulnerability</a></p></div>
         </div>
       </div>
     </div>
@@ -130,16 +125,6 @@ Migration Notes
       targetPanes[0].classList.add('shown');
     }
   }
-  document.querySelectorAll('.card__tab__radio').forEach(radio => {
-    radio.addEventListener('change', function(){
-      const card = this.closest('.card');
-      if(!card) return;
-      const panes = card.querySelectorAll('[data-pane]');
-      panes.forEach(p => p.style.display = 'none');
-      const pane = card.querySelector(`[data-pane='${this.value}']`);
-      if(pane) pane.style.display = 'block';
-    });
-  });
 </script>
 </body>
 </html>

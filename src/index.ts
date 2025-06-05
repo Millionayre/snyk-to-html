@@ -28,37 +28,26 @@ program
     '-a, --actionable-remediation',
     'Display actionable remediation info if available',
   )
-  .option(
-    '-m, --modern',
-    'Use modern unified template design',
-  )
+
+  .option('-m, --modern', 'Use modern unified template design')
   .parse(process.argv);
 
-let template;
+const opts = program.opts();
+
+
+let templatePath: string;
+if (opts.template) {
+  templatePath = opts.template as string;
+} else if (opts.modern) {
+  templatePath = path.join(__dirname, '..', 'template', 'modernized-sca-report.hbs');
+} else if (opts.actionableRemediation) {
+  templatePath = path.join(__dirname, '..', 'template', 'remediation-report.hbs');
+} else {
+  templatePath = path.join(__dirname, '..', 'template', 'test-report.hbs');
+}
+
 let source;
 let output;
-
-if (program.template) {
-  // template
-  template = program.template; // grab the next item
-  if (typeof template === 'boolean') {
-    if (program.actionableRemediation) {
-      template = path.join(__dirname, '../template/remediation-report.hbs');
-    } else {
-      template = program.modern
-        ? path.join(__dirname, '../template/modern/test-report.hbs')
-        : path.join(__dirname, '../template/test-report.hbs');
-    }
-  }
-} else {
-  if (program.modern) {
-    template = path.join(__dirname, '../template/modern/test-report.hbs');
-  } else if (program.actionableRemediation) {
-    template = path.join(__dirname, '../template/remediation-report.hbs');
-  } else {
-    template = path.join(__dirname, '../template/test-report.hbs');
-  }
-}
 if (program.input) {
   // input source
   source = program.input; // grab the next item
@@ -84,7 +73,7 @@ if (program.debug) {
 SnykToHtml.run(
   source,
   !!program.actionableRemediation,
-  template,
+  templatePath,
   !!program.summary,
   onReportOutput,
 );

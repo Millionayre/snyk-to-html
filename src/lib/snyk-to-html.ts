@@ -91,7 +91,7 @@ class SnykToHtml {
       ) {
         // Preserve modern template selection for IaC reports
         template = usingModern
-          ? path.join(__dirname, '../../template/modern/test-report.hbs')
+          ? path.join(__dirname, '../../template/modernized-sca-report.hbs')
           : template === path.join(__dirname, '../../template/test-report.hbs')
           ? path.join(__dirname, '../../template/iac/test-report.hbs')
           : template;
@@ -99,7 +99,7 @@ class SnykToHtml {
       } else if (data?.runs && data?.runs[0].tool.driver.name === 'SnykCode') {
         // Preserve modern template selection for Code reports
         template = usingModern
-          ? path.join(__dirname, '../../template/modern/test-report.hbs')
+          ? path.join(__dirname, '../../template/modernized-sca-report.hbs')
           : template === path.join(__dirname, '../../template/test-report.hbs')
           ? path.join(__dirname, '../../template/code/test-report.hbs')
           : template;
@@ -192,13 +192,16 @@ async function registerPeerPartial(
   name: string,
 ): Promise<void> {
   const dir = path.dirname(templatePath);
-  const file = path.join(dir, `test-report.${name}.hbs`);
-  const template = await compileTemplate(file);
-  Handlebars.registerPartial(name, template);
+  const base = path.basename(templatePath, '.hbs');
+  const file = path.join(dir, `${base}.${name}.hbs`);
+  if (fs.existsSync(file)) {
+    const template = await compileTemplate(file);
+    Handlebars.registerPartial(name, template);
+  }
 }
 
 function isModernTemplate(templatePath: string): boolean {
-  return templatePath.includes(`${path.sep}modern${path.sep}`);
+  return path.basename(templatePath).startsWith('modernized-sca-report');
 }
 
 async function generateTemplate(

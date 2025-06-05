@@ -112,8 +112,9 @@ Snyk JSON to HTML Mapper mapper works with the different Snyk Products.  Change 
 Simply open your new file (`results-[type].html` as above) in a browser, and rejoice.
 
 Sample outputs demonstrating the new unified style can be viewed in
-`updated-sca-report.html`, `updated-sast-report.html`, `updated-iac-report.html` and `updated-container-report.html` at the project
-root.
+`updated-sca-report.html`, `updated-sast-report.html`, `updated-iac-report.html` and `updated-container-report.html` at the project root. The
+templates powering these examples live under the `template/` directory, with the
+modern SCA template named `modernized-sca-report.hbs`.
 
 
 ## Getting support for snyk-to-html

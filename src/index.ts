@@ -46,13 +46,13 @@ if (program.template) {
       template = path.join(__dirname, '../template/remediation-report.hbs');
     } else {
       template = program.modern
-        ? path.join(__dirname, '../template/modern/test-report.hbs')
+        ? path.join(__dirname, '../template/modernized-sca-report.hbs')
         : path.join(__dirname, '../template/test-report.hbs');
     }
   }
 } else {
   if (program.modern) {
-    template = path.join(__dirname, '../template/modern/test-report.hbs');
+    template = path.join(__dirname, '../template/modernized-sca-report.hbs');
   } else if (program.actionableRemediation) {
     template = path.join(__dirname, '../template/remediation-report.hbs');
   } else {

@@ -117,6 +117,7 @@ templates powering these examples live under the `template/` directory, with the
 modern SCA template named `modernized-sca-report.hbs`.
 
 
+
 ## Getting support for snyk-to-html
 
 [Submit a ticket](https://support.snyk.io/hc/en-us/requests/new) to Snyk support when you need help with `snyk-to-html` or Snyk in general. Note that Snyk support does not actively monitor GitHub Issues on any [Snyk development project](https://github.com/snyk).

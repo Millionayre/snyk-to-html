@@ -28,10 +28,12 @@ program
     '-a, --actionable-remediation',
     'Display actionable remediation info if available',
   )
+
   .option('-m, --modern', 'Use modern unified template design')
   .parse(process.argv);
 
 const opts = program.opts();
+
 
 let templatePath: string;
 if (opts.template) {

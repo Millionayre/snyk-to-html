@@ -204,6 +204,10 @@ function isModernTemplate(templatePath: string): boolean {
   return path.basename(templatePath).startsWith('modernized-sca-report');
 }
 
+function isModernTemplate(templatePath: string): boolean {
+  return templatePath.includes(`${path.sep}modern${path.sep}`);
+}
+
 async function generateTemplate(
   data: any,
   template: string,
@@ -241,6 +245,7 @@ async function generateTemplate(
   const basename = path.basename(template, '.hbs');
 
   if (basename === 'modernized-sca-report') {
+
     await registerPeerPartial(template, 'modern-inline-css');
     await registerPeerPartial(template, 'modern-header');
     await registerPeerPartial(template, 'modern-metatable-css');

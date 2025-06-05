@@ -84,22 +84,25 @@ class SnykToHtml {
   ): Promise<string> {
     const promisedString = source ? readFile(source) : readInputFromStdin();
     return promisedString.then(promisedParseJSON).then((data: any) => {
+      const usingModern = isModernTemplate(template);
       if (
         data?.infrastructureAsCodeIssues ||
         data[0]?.infrastructureAsCodeIssues
       ) {
-        // for IaC input we need to change the default template to an IaC specific template
-        // at the same time we also want to support the -t / --template flag
-        template =
-          template === path.join(__dirname, '../../template/test-report.hbs')
-            ? path.join(__dirname, '../../template/iac/test-report.hbs')
-            : template;
+        // Preserve modern template selection for IaC reports
+        template = usingModern
+          ? path.join(__dirname, '../../template/modern/test-report.hbs')
+          : template === path.join(__dirname, '../../template/test-report.hbs')
+          ? path.join(__dirname, '../../template/iac/test-report.hbs')
+          : template;
         return processIacData(data, template, summary);
       } else if (data?.runs && data?.runs[0].tool.driver.name === 'SnykCode') {
-        template =
-          template === path.join(__dirname, '../../template/test-report.hbs')
-            ? path.join(__dirname, '../../template/code/test-report.hbs')
-            : template;
+        // Preserve modern template selection for Code reports
+        template = usingModern
+          ? path.join(__dirname, '../../template/modern/test-report.hbs')
+          : template === path.join(__dirname, '../../template/test-report.hbs')
+          ? path.join(__dirname, '../../template/code/test-report.hbs')
+          : template;
         return processCodeData(data, template, summary);
       } else if (data.docker) {
         return processContainerData(data, remediation, template, summary);

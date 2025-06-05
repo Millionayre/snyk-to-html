@@ -28,6 +28,10 @@ program
     '-a, --actionable-remediation',
     'Display actionable remediation info if available',
   )
+  .option(
+    '-m, --modern',
+    'Use modern unified template design',
+  )
   .parse(process.argv);
 
 let template;
@@ -41,11 +45,15 @@ if (program.template) {
     if (program.actionableRemediation) {
       template = path.join(__dirname, '../template/remediation-report.hbs');
     } else {
-      template = path.join(__dirname, '../template/test-report.hbs');
+      template = program.modern
+        ? path.join(__dirname, '../template/modern/test-report.hbs')
+        : path.join(__dirname, '../template/test-report.hbs');
     }
   }
 } else {
-  if (program.actionableRemediation) {
+  if (program.modern) {
+    template = path.join(__dirname, '../template/modern/test-report.hbs');
+  } else if (program.actionableRemediation) {
     template = path.join(__dirname, '../template/remediation-report.hbs');
   } else {
     template = path.join(__dirname, '../template/test-report.hbs');

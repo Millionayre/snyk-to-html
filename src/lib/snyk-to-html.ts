@@ -84,22 +84,25 @@ class SnykToHtml {
   ): Promise<string> {
     const promisedString = source ? readFile(source) : readInputFromStdin();
     return promisedString.then(promisedParseJSON).then((data: any) => {
+      const usingModern = isModernTemplate(template);
       if (
         data?.infrastructureAsCodeIssues ||
         data[0]?.infrastructureAsCodeIssues
       ) {
-        // for IaC input we need to change the default template to an IaC specific template
-        // at the same time we also want to support the -t / --template flag
-        template =
-          template === path.join(__dirname, '../../template/test-report.hbs')
-            ? path.join(__dirname, '../../template/iac/test-report.hbs')
-            : template;
+        // Preserve modern template selection for IaC reports
+        template = usingModern
+          ? path.join(__dirname, '../../template/modernized-sca-report.hbs')
+          : template === path.join(__dirname, '../../template/test-report.hbs')
+          ? path.join(__dirname, '../../template/iac/test-report.hbs')
+          : template;
         return processIacData(data, template, summary);
       } else if (data?.runs && data?.runs[0].tool.driver.name === 'SnykCode') {
-        template =
-          template === path.join(__dirname, '../../template/test-report.hbs')
-            ? path.join(__dirname, '../../template/code/test-report.hbs')
-            : template;
+        // Preserve modern template selection for Code reports
+        template = usingModern
+          ? path.join(__dirname, '../../template/modernized-sca-report.hbs')
+          : template === path.join(__dirname, '../../template/test-report.hbs')
+          ? path.join(__dirname, '../../template/code/test-report.hbs')
+          : template;
         return processCodeData(data, template, summary);
       } else if (data.docker) {
         return processContainerData(data, remediation, template, summary);
@@ -189,9 +192,16 @@ async function registerPeerPartial(
   name: string,
 ): Promise<void> {
   const dir = path.dirname(templatePath);
-  const file = path.join(dir, `test-report.${name}.hbs`);
-  const template = await compileTemplate(file);
-  Handlebars.registerPartial(name, template);
+  const base = path.basename(templatePath, '.hbs');
+  const file = path.join(dir, `${base}.${name}.hbs`);
+  if (fs.existsSync(file)) {
+    const template = await compileTemplate(file);
+    Handlebars.registerPartial(name, template);
+  }
+}
+
+function isModernTemplate(templatePath: string): boolean {
+  return path.basename(templatePath).startsWith('modernized-sca-report');
 }
 
 async function generateTemplate(
@@ -228,14 +238,25 @@ async function generateTemplate(
     data.packageManager = data.paths[0].packageManager;
   }
 
-  await registerPeerPartial(template, 'inline-css');
-  await registerPeerPartial(template, 'header');
-  await registerPeerPartial(template, 'metatable-css');
-  await registerPeerPartial(template, 'metatable');
-  await registerPeerPartial(template, 'inline-js');
-  await registerPeerPartial(template, 'vuln-card');
-  await registerPeerPartial(template, 'remediation-css');
-  await registerPeerPartial(template, 'actionable-remediations');
+  const basename = path.basename(template, '.hbs');
+
+  if (basename === 'modernized-sca-report') {
+    await registerPeerPartial(template, 'modern-inline-css');
+    await registerPeerPartial(template, 'modern-header');
+    await registerPeerPartial(template, 'modern-metatable-css');
+    await registerPeerPartial(template, 'modern-metatable');
+    await registerPeerPartial(template, 'modern-inline-js');
+    await registerPeerPartial(template, 'modern-vuln-card');
+  } else {
+    await registerPeerPartial(template, 'inline-css');
+    await registerPeerPartial(template, 'header');
+    await registerPeerPartial(template, 'metatable-css');
+    await registerPeerPartial(template, 'metatable');
+    await registerPeerPartial(template, 'inline-js');
+    await registerPeerPartial(template, 'vuln-card');
+    await registerPeerPartial(template, 'remediation-css');
+    await registerPeerPartial(template, 'actionable-remediations');
+  }
 
   const htmlTemplate = await compileTemplate(template);
   return htmlTemplate(data);
@@ -245,12 +266,21 @@ async function generateIacTemplate(
   data: any,
   template: string,
 ): Promise<string> {
-  await registerPeerPartial(template, 'inline-css');
-  await registerPeerPartial(template, 'header');
-  await registerPeerPartial(template, 'metatable-css');
-  await registerPeerPartial(template, 'metatable');
-  await registerPeerPartial(template, 'inline-js');
-  await registerPeerPartial(template, 'vuln-card');
+  if (isModernTemplate(template)) {
+    await registerPeerPartial(template, 'modern-inline-css');
+    await registerPeerPartial(template, 'modern-header');
+    await registerPeerPartial(template, 'modern-metatable-css');
+    await registerPeerPartial(template, 'modern-metatable');
+    await registerPeerPartial(template, 'modern-inline-js');
+    await registerPeerPartial(template, 'modern-vuln-card');
+  } else {
+    await registerPeerPartial(template, 'inline-css');
+    await registerPeerPartial(template, 'header');
+    await registerPeerPartial(template, 'metatable-css');
+    await registerPeerPartial(template, 'metatable');
+    await registerPeerPartial(template, 'inline-js');
+    await registerPeerPartial(template, 'vuln-card');
+  }
 
   const htmlTemplate = await compileTemplate(template);
 
@@ -261,12 +291,21 @@ async function generateCodeTemplate(
   data: any,
   template: string,
 ): Promise<string> {
-  await registerPeerPartial(template, 'inline-css');
-  await registerPeerPartial(template, 'inline-js');
-  await registerPeerPartial(template, 'header');
-  await registerPeerPartial(template, 'metatable-css');
-  await registerPeerPartial(template, 'metatable');
-  await registerPeerPartial(template, 'code-snip');
+  if (isModernTemplate(template)) {
+    await registerPeerPartial(template, 'modern-inline-css');
+    await registerPeerPartial(template, 'modern-inline-js');
+    await registerPeerPartial(template, 'modern-header');
+    await registerPeerPartial(template, 'modern-metatable-css');
+    await registerPeerPartial(template, 'modern-metatable');
+    await registerPeerPartial(template, 'code-snip');
+  } else {
+    await registerPeerPartial(template, 'inline-css');
+    await registerPeerPartial(template, 'inline-js');
+    await registerPeerPartial(template, 'header');
+    await registerPeerPartial(template, 'metatable-css');
+    await registerPeerPartial(template, 'metatable');
+    await registerPeerPartial(template, 'code-snip');
+  }
 
   const htmlTemplate = await compileTemplate(template);
 
